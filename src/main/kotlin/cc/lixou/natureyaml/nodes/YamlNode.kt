@@ -1,7 +1,3 @@
 package cc.lixou.natureyaml.nodes
 
-abstract class YamlNode {
-
-
-
-}
+abstract class YamlNode

@@ -1,4 +1,3 @@
 package cc.lixou.natureyaml.nodes
 
-class KeyNode(key: String, value: ValueNode) : YamlNode() {
-}
+data class KeyNode(val key: String, val value: ValueNode) : YamlNode()

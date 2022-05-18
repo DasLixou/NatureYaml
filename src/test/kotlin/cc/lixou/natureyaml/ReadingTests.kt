@@ -6,8 +6,8 @@ class ReadingTests : DescribeSpec({
 
     describe("reading a key-value") {
         val input = "test: hay"
-        val token = NatureYaml.decodeFromString(input)
-        println(token)
+        val node = NatureYaml.decodeFromString(input)
+        println(node)
     }
 
 })
