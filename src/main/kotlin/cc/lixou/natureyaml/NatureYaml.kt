@@ -1,5 +1,8 @@
 package cc.lixou.natureyaml
 
+import cc.lixou.natureyaml.lexer.Token
+import cc.lixou.natureyaml.lexer.YamlLexer
+
 object NatureYaml {
 
     fun decodeFromString(text: String): List<Token> {

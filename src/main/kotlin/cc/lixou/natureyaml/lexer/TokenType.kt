@@ -1,4 +1,4 @@
-package cc.lixou.natureyaml
+package cc.lixou.natureyaml.lexer
 
 enum class TokenType {
 
