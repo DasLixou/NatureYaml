@@ -1,5 +1,7 @@
 package cc.lixou.natureyaml.lexer
 
+import cc.lixou.natureyaml.util.toNumberOrNull
+
 class YamlLexer(private val text: String) {
 
     private var currentIndex = 0
@@ -11,6 +13,7 @@ class YamlLexer(private val text: String) {
             currentChar == Character.MIN_VALUE -> null
             currentChar == ':' -> _parseCurrent(TokenType.COLON)
             currentChar.isLetter() -> parseLiteral()
+            currentChar.isDigit() -> parseNumber()
             else -> throw IllegalStateException("No Token found: '$currentChar'")
         }
         advance()
@@ -18,6 +21,7 @@ class YamlLexer(private val text: String) {
     }
 
     private fun parseLiteral() = _parseUntil(TokenType.LITERAL, { it.isLetter() }, { it.toString() })
+    private fun parseNumber() = _parseUntil(TokenType.NUMBER, { it.isDigit() }, { it.toString().toNumberOrNull() })
 
     private fun _parseUntil(type: TokenType, condition: (Char) -> Boolean, data: (StringBuilder) -> Any?): Token {
         val result = StringBuilder(currentChar.toString())

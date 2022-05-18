@@ -5,6 +5,7 @@ import cc.lixou.natureyaml.lexer.TokenType
 import cc.lixou.natureyaml.lexer.YamlLexer
 import cc.lixou.natureyaml.nodes.KeyNode
 import cc.lixou.natureyaml.nodes.StringNode
+import cc.lixou.natureyaml.nodes.ValueNode
 import cc.lixou.natureyaml.nodes.YamlNode
 
 class YamlParser(private val lexer: YamlLexer) {
@@ -16,15 +17,15 @@ class YamlParser(private val lexer: YamlLexer) {
     private fun parseKeyValue(): KeyNode {
         val key = eat(TokenType.LITERAL)
         eat(TokenType.COLON)
-        val value = eat(TokenType.LITERAL)
-        return KeyNode(key.data as String, StringNode(value.data as String))
+        val value = eat(TokenType.LITERAL, TokenType.NUMBER) // TODO: Add Value Type List or so
+        return KeyNode(key.data as String, ValueNode.of(value.data))
     }
 
     private fun eat(): Token = lexer.nextToken() ?: throw IllegalStateException("Didn't expect the end here..")
 
-    private fun eat(type: TokenType): Token {
+    private fun eat(vararg type: TokenType): Token {
         val result = eat()
-        if (result.type != type) throw IllegalStateException("Expected '$type' but got '${result.type}'")
+        if (!type.contains(result.type)) throw IllegalStateException("Expected '$type' but got '${result.type}'")
         return result
     }
 
