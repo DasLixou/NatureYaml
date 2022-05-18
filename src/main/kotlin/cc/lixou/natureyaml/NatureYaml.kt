@@ -2,9 +2,15 @@ package cc.lixou.natureyaml
 
 object NatureYaml {
 
-    fun decodeFromString(text: String): Token {
+    fun decodeFromString(text: String): List<Token> {
         val lexer = YamlLexer(text)
-        return lexer.nextToken()
+        val list = mutableListOf<Token>()
+        var token = lexer.nextToken()
+        while (token != null) {
+            list.add(token)
+            token = lexer.nextToken()
+        }
+        return list
     }
 
 }

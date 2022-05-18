@@ -5,14 +5,13 @@ class YamlLexer(private val text: String) {
     private var currentIndex = 0
     private var currentChar = text[currentIndex]
 
-    init {
-
-    }
-
-    fun nextToken(): Token {
+    fun nextToken(): Token? {
+        skipWhitespace()
         val result = when {
+            currentChar == Character.MIN_VALUE -> null
+            currentChar == ':' -> _parseCurrent(TokenType.COLON)
             currentChar.isLetter() -> parseLiteral()
-            else -> throw IllegalStateException("No Token found")
+            else -> throw IllegalStateException("No Token found: '$currentChar'")
         }
         advance()
         return result
@@ -31,15 +30,26 @@ class YamlLexer(private val text: String) {
         return Token(type, data.invoke(result))
     }
 
+    private fun _parseCurrent(type: TokenType): Token = Token(type, currentChar.toString())
+
+    private fun skipWhitespace() {
+        while (currentChar.isWhitespace() && currentChar != Character.MIN_VALUE) {
+            advance()
+        }
+    }
+
     private fun advance(): Char {
         currentIndex++
-        if(text.length <= currentIndex) return Character.MIN_VALUE
-        currentChar = text[currentIndex]
+        currentChar = if (text.length <= currentIndex) {
+            Character.MIN_VALUE
+        } else {
+            text[currentIndex]
+        }
         return currentChar
     }
 
     private fun peek(): Char {
-        if(text.length <= currentIndex + 1) return Character.MIN_VALUE
+        if (text.length <= currentIndex + 1) return Character.MIN_VALUE
         return text[currentIndex + 1]
     }
 
