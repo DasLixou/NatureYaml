@@ -17,8 +17,13 @@ class YamlParser(private val lexer: YamlLexer) {
     private fun parseKeyValue(): KeyNode {
         val key = eat(TokenType.LITERAL)
         eat(TokenType.COLON)
+        val value = parseValue()
+        return KeyNode(key.data as String, value)
+    }
+
+    private fun parseValue(): ValueNode {
         val value = eat(TokenType.LITERAL, TokenType.NUMBER) // TODO: Add Value Type List or so
-        return KeyNode(key.data as String, ValueNode.of(value.data))
+        return ValueNode.of(value.data)
     }
 
     private fun eat(): Token = lexer.nextToken() ?: throw IllegalStateException("Didn't expect the end here..")
